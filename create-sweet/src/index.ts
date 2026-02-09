@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
 import { createRequire } from "node:module";
-import { existsSync, mkdirSync, readdirSync, renameSync, rmSync } from "node:fs";
+import { existsSync, readdirSync, renameSync, rmSync } from "node:fs";
 import { join, resolve } from "node:path";
 import { downloadTemplate } from "giget";
 import * as p from "@clack/prompts";
@@ -13,18 +13,18 @@ const { version: packageVersion } = require("../package.json");
 // Template definitions
 const TEMPLATES = [
   {
-    value: "nextjs-monorepo-starter" as const,
+    value: "nextjs-monorepo" as const,
     label: "Next.js Monorepo",
     hint: "Turborepo + Next.js + shadcn/ui + Biome + Knip",
   },
   {
-    value: "react-starter" as const,
-    label: "React Starter",
+    value: "react-vite" as const,
+    label: "React + Vite",
     hint: "React 19 + Vite + Tailwind CSS v4 + shadcn/ui",
   },
   {
-    value: "tauri-starter" as const,
-    label: "Tauri Starter",
+    value: "tauri-desktop" as const,
+    label: "Tauri Desktop",
     hint: "Tauri 2 + Next.js + Elysia + Turborepo",
   },
 ];
@@ -34,7 +34,6 @@ type TemplateId = (typeof TEMPLATES)[number]["value"];
 // Download and setup template
 async function downloadAndSetup(templateId: TemplateId, projectName: string): Promise<boolean> {
   const targetDir = resolve(process.cwd(), projectName);
-  const template = TEMPLATES.find((t) => t.value === templateId)!;
 
   const downloadSpinner = p.spinner();
   downloadSpinner.start("Downloading template...");
@@ -52,7 +51,8 @@ async function downloadAndSetup(templateId: TemplateId, projectName: string): Pr
       preferOffline: false,
     });
 
-    // giget creates a subdirectory with the template name (from the path), we need to move files up
+    // giget creates a subdirectory matching the last path segment
+    // e.g., templates/react-vite#main -> creates react-vite folder
     const gigetSubdir = join(targetDir, templateId);
     if (existsSync(gigetSubdir)) {
       const files = readdirSync(gigetSubdir);
@@ -74,10 +74,10 @@ async function downloadAndSetup(templateId: TemplateId, projectName: string): Pr
 // Get install command based on template
 function getInstallCommand(templateId: TemplateId): string {
   switch (templateId) {
-    case "nextjs-monorepo-starter":
-    case "tauri-starter":
+    case "nextjs-monorepo":
+    case "tauri-desktop":
       return "pnpm install";
-    case "react-starter":
+    case "react-vite":
       return "pnpm install";
     default:
       return "pnpm install";
@@ -87,11 +87,11 @@ function getInstallCommand(templateId: TemplateId): string {
 // Get dev command based on template
 function getDevCommand(templateId: TemplateId): string {
   switch (templateId) {
-    case "nextjs-monorepo-starter":
+    case "nextjs-monorepo":
       return "pnpm dev";
-    case "react-starter":
+    case "react-vite":
       return "pnpm dev";
-    case "tauri-starter":
+    case "tauri-desktop":
       return "pnpm dev";
     default:
       return "pnpm dev";
