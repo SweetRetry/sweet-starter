@@ -1,4 +1,4 @@
-# create-sweet
+# create-sweet-starter
 
 CLI tool to scaffold modern web development starter templates.
 
@@ -7,25 +7,25 @@ CLI tool to scaffold modern web development starter templates.
 ### npm
 
 ```bash
-npm create sweet
+npm create sweet-starter
 ```
 
 ### yarn
 
 ```bash
-yarn create sweet
+yarn create sweet-starter
 ```
 
 ### pnpm
 
 ```bash
-pnpm create sweet
+pnpm create sweet-starter
 ```
 
 ### npx
 
 ```bash
-npx create-sweet
+npx create-sweet-starter
 ```
 
 ## Available Templates

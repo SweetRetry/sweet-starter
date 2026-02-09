@@ -4,7 +4,7 @@
   "description": "CLI tool to scaffold starter templates with Next.js, React, and Tauri",
   "type": "module",
   "bin": {
-    "create-sweet": "dist/index.js"
+    "create-sweet-starter": "dist/index.js"
   },
   "files": [
     "dist"
