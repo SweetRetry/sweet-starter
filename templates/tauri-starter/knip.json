@@ -1,0 +1,48 @@
+{
+  "$schema": "https://unpkg.com/knip@5/schema.json",
+  "workspaces": {
+    ".": {},
+    "apps/web": {
+      "entry": ["app/**/*.{ts,tsx}", "components/**/*.{ts,tsx}"],
+      "project": ["**/*.{ts,tsx}"],
+      "ignore": [".next/**", "out/**"]
+    },
+    "apps/backend": {},
+    "apps/tauri": {
+      "entry": [],
+      "project": [],
+      "ignore": ["src-tauri/**"]
+    },
+    "packages/ui": {
+      "entry": ["src/**/*.{ts,tsx}"],
+      "project": ["src/**/*.{ts,tsx}"]
+    },
+    "packages/api-client": {},
+    "packages/typescript-config": {
+      "entry": [],
+      "project": []
+    }
+  },
+  "ignore": [
+    "**/node_modules/**",
+    "**/.next/**",
+    "**/dist/**",
+    "**/out/**",
+    "**/target/**",
+    "**/*.css"
+  ],
+  "ignoreDependencies": [
+    "@types/*",
+    "@tauri-apps/api",
+    "@workspace/api-client",
+    "lucide-react",
+    "next-themes",
+    "react-dom",
+    "zod",
+    "@tailwindcss/postcss",
+    "@turbo/gen",
+    "postcss",
+    "postcss-load-config",
+    "next"
+  ]
+}

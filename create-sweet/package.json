@@ -1,0 +1,43 @@
+{
+  "name": "create-sweet",
+  "version": "1.0.0",
+  "description": "CLI tool to scaffold starter templates with Next.js, React, and Tauri",
+  "type": "module",
+  "bin": {
+    "create-sweet": "./dist/index.js"
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsup src/index.ts --format esm --target node20 --clean",
+    "dev": "tsup src/index.ts --format esm --target node20 --watch",
+    "prepublishOnly": "pnpm build"
+  },
+  "keywords": [
+    "create",
+    "starter",
+    "template",
+    "nextjs",
+    "react",
+    "tauri",
+    "monorepo",
+    "scaffold",
+    "cli"
+  ],
+  "author": "zhangzimin",
+  "license": "MIT",
+  "engines": {
+    "node": ">=20"
+  },
+  "dependencies": {
+    "@clack/prompts": "^1.0.0",
+    "giget": "^1.2.4",
+    "picocolors": "^1.1.1"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.0",
+    "tsup": "^8.3.5",
+    "typescript": "^5.7.0"
+  }
+}
