@@ -138,7 +138,7 @@ async function downloadAndSetup(templateId: TemplateId, projectName: string): Pr
   downloadSpinner.start(`Downloading ${template.label} (${template.size})...`);
 
   try {
-    const githubRepo = "sweet/starter";
+    const githubRepo = "SweetRetry/sweet-starter";
     const templateDir = `templates/${templateId}#main`;
 
     await downloadTemplate(`github:${githubRepo}/${templateDir}`, {

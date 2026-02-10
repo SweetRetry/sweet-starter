@@ -1,6 +1,6 @@
 {
   "name": "create-sweet-starter",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "CLI tool to scaffold starter templates with Next.js, React, and Tauri",
   "type": "module",
   "bin": {
