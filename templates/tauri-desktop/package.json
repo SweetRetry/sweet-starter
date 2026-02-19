@@ -17,7 +17,7 @@
     "tauri": "pnpm --filter @workspace/tauri tauri"
   },
   "devDependencies": {
-    "@biomejs/biome": "^2.3.11",
+    "@biomejs/biome": "^2.3.12",
     "@workspace/typescript-config": "workspace:*",
     "knip": "^5.82.1",
     "turbo": "^2.7.5",

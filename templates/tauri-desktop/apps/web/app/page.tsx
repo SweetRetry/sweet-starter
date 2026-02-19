@@ -17,7 +17,10 @@ export default function Page() {
 
   const checkApi = async () => {
     try {
-      const res = await fetch("http://localhost:3001/health")
+      const res = await fetch(
+        process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:3001/health"
+      )
+      if (!res.ok) throw new Error(`HTTP ${res.status}`)
       const data = await res.json()
       setApiStatus(data)
     } catch {

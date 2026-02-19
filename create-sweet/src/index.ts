@@ -61,7 +61,6 @@ function formatSize(bytes: number): string {
 
 // Environment check
 async function checkEnvironment(templateId: TemplateId): Promise<{ ok: boolean; missing: string[] }> {
-  const template = TEMPLATES.find((t) => t.value === templateId)!;
   const missing: string[] = [];
 
   // Check Node.js version
@@ -97,22 +96,35 @@ async function checkEnvironment(templateId: TemplateId): Promise<{ ok: boolean; 
   return { ok: missing.length === 0, missing };
 }
 
+function getErrorMessage(err: unknown): string {
+  return err instanceof Error ? err.message : String(err);
+}
+
+function escapeHtml(str: string): string {
+  return str.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
+}
+
 // Update project name in template files
 async function updateProjectName(targetDir: string, projectName: string): Promise<void> {
   // Update package.json name
   const packageJsonPath = join(targetDir, "package.json");
   if (existsSync(packageJsonPath)) {
-    const content = readFileSync(packageJsonPath, "utf-8");
-    const pkg = JSON.parse(content);
-    pkg.name = projectName;
-    writeFileSync(packageJsonPath, JSON.stringify(pkg, null, 2) + "\n");
+    try {
+      const content = readFileSync(packageJsonPath, "utf-8");
+      const pkg = JSON.parse(content);
+      pkg.name = projectName;
+      writeFileSync(packageJsonPath, JSON.stringify(pkg, null, 2) + "\n");
+    } catch (err) {
+      p.log.warn(`Failed to update package.json: ${getErrorMessage(err)}`);
+    }
   }
 
   // Update index.html title for react-vite
   const indexHtmlPath = join(targetDir, "index.html");
   if (existsSync(indexHtmlPath)) {
     let content = readFileSync(indexHtmlPath, "utf-8");
-    content = content.replace(/<title>.*?<\/title>/, `<title>${projectName}</title>`);
+    const safeTitle = escapeHtml(projectName);
+    content = content.replace(/<title>.*?<\/title>/, `<title>${safeTitle}</title>`);
     writeFileSync(indexHtmlPath, content);
   }
 
@@ -162,7 +174,7 @@ async function downloadAndSetup(templateId: TemplateId, projectName: string): Pr
     return true;
   } catch (err) {
     downloadSpinner.stop("Failed to download template");
-    p.log.error(`Error: ${err instanceof Error ? err.message : String(err)}`);
+    p.log.error(`Error: ${getErrorMessage(err)}`);
     return false;
   }
 }
@@ -181,7 +193,7 @@ async function installDependencies(targetDir: string): Promise<boolean> {
     return true;
   } catch (err) {
     installSpinner.stop("Failed to install dependencies");
-    p.log.error(`Error: ${err instanceof Error ? err.message : String(err)}`);
+    p.log.error(`Error: ${getErrorMessage(err)}`);
     return false;
   }
 }
@@ -202,7 +214,7 @@ async function initGit(targetDir: string): Promise<boolean> {
     return true;
   } catch (err) {
     gitSpinner.stop("Failed to initialize Git");
-    p.log.warn(`Git initialization skipped: ${err instanceof Error ? err.message : String(err)}`);
+    p.log.warn(`Git initialization skipped: ${getErrorMessage(err)}`);
     return false;
   }
 }
@@ -213,24 +225,6 @@ async function openEditor(targetDir: string): Promise<void> {
     await execa("code", [targetDir], { stdio: "ignore" });
   } catch {
     // VS Code not installed, ignore
-  }
-}
-
-// Get install command based on template
-function getInstallCommand(templateId: TemplateId): string {
-  return "pnpm install";
-}
-
-// Get dev command based on template
-function getDevCommand(templateId: TemplateId): string {
-  switch (templateId) {
-    case "nextjs-monorepo":
-    case "react-vite":
-      return "pnpm dev";
-    case "tauri-desktop":
-      return "pnpm dev";
-    default:
-      return "pnpm dev";
   }
 }
 
@@ -252,8 +246,6 @@ async function main(): Promise<void> {
     p.cancel("Operation cancelled.");
     process.exit(0);
   }
-
-  const templateInfo = TEMPLATES.find((t) => t.value === template)!;
 
   // Environment check
   const envCheck = await checkEnvironment(template);
@@ -315,12 +307,10 @@ async function main(): Promise<void> {
   await initGit(targetDir);
 
   // Success message
-  const devCmd = getDevCommand(template);
-
   p.note(
     [
       `${pc.cyan("cd")} ${projectName}`,
-      installSuccess ? `${pc.cyan(devCmd)}  ${pc.dim("# Start development")}` : `${pc.cyan("pnpm install")}  ${pc.dim("# Install dependencies")}`,
+      installSuccess ? `${pc.cyan("pnpm dev")}  ${pc.dim("# Start development")}` : `${pc.cyan("pnpm install")}  ${pc.dim("# Install dependencies")}`,
       "",
       `${pc.dim("Your project is ready!")}`,
     ].join("\n"),
@@ -342,6 +332,6 @@ async function main(): Promise<void> {
 
 // Run main
 main().catch((err) => {
-  p.log.error(err instanceof Error ? err.message : String(err));
+  p.log.error(getErrorMessage(err));
   process.exit(1);
 });
