@@ -54,11 +54,17 @@ pnpm dev:web      # Next.js on localhost:3000
 pnpm dev:backend  # Elysia on localhost:3001
 pnpm dev:tauri    # Desktop app (starts web automatically)
 
+# Portless — named .localhost URLs (no more port conflicts)
+portless proxy start                    # Start proxy daemon (once)
+portless web next dev                   # → http://web.localhost:1355
+portless api pnpm dev:backend           # → http://api.localhost:1355
+
 # Quality checks
 pnpm typecheck    # TypeScript checking
 pnpm lint         # Biome linting
 pnpm check        # Biome with auto-fix
 pnpm knip         # Find unused code
+npx -y react-doctor@latest . --verbose  # React project health check
 
 # Build
 pnpm build        # Build all (may fail without Rust)

@@ -15,20 +15,12 @@ export default function Page() {
 
         <div className="flex gap-4">
           <Button asChild>
-            <a
-              href="https://turbo.build/repo/docs"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
+            <a href="https://turbo.build/repo/docs" target="_blank" rel="noopener noreferrer">
               Turborepo Docs
             </a>
           </Button>
           <Button variant="outline" asChild>
-            <a
-              href="https://ui.shadcn.com"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
+            <a href="https://ui.shadcn.com" target="_blank" rel="noopener noreferrer">
               shadcn/ui
             </a>
           </Button>
@@ -53,19 +45,11 @@ export default function Page() {
   )
 }
 
-function FeatureCard({
-  title,
-  description,
-}: {
-  title: string
-  description: string
-}) {
+function FeatureCard({ title, description }: { title: string; description: string }) {
   return (
     <div className="rounded-xl border border-zinc-200 bg-white p-6 shadow-sm dark:border-zinc-800 dark:bg-zinc-900">
       <h3 className="font-semibold">{title}</h3>
-      <p className="mt-2 text-sm text-zinc-600 dark:text-zinc-400">
-        {description}
-      </p>
+      <p className="mt-2 text-sm text-zinc-600 dark:text-zinc-400">{description}</p>
     </div>
   )
 }
