@@ -9,11 +9,11 @@
     "tauri": "tauri"
   },
   "dependencies": {
-    "@tauri-apps/api": "^2.9.1",
+    "@tauri-apps/api": "^2.10.1",
     "@workspace/api-client": "workspace:*"
   },
   "devDependencies": {
-    "@tauri-apps/cli": "^2.9.6",
+    "@tauri-apps/cli": "^2.10.0",
     "@workspace/typescript-config": "workspace:*",
     "typescript": "^5.9.3"
   }
