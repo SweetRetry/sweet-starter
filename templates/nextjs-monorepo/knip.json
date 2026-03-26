@@ -1,14 +1,9 @@
 {
-  "$schema": "https://unpkg.com/knip@5/schema.json",
+  "$schema": "https://unpkg.com/knip@6/schema.json",
   "workspaces": {
-    ".": {
-      "entry": [],
-      "project": ["*.{js,ts}"]
-    },
     "apps/web": {
-      "entry": ["app/**/*.{ts,tsx}", "components/**/*.{ts,tsx}"],
-      "project": ["**/*.{ts,tsx}"],
-      "ignore": [".next/**"]
+      "entry": ["app/**/*.{ts,tsx}", "components/**/*.{ts,tsx}", "hooks/**/*.{ts,tsx}"],
+      "project": ["**/*.{ts,tsx}"]
     },
     "packages/ui": {
       "entry": ["src/**/*.{ts,tsx}"],
@@ -19,6 +14,6 @@
       "project": ["*.json"]
     }
   },
-  "ignore": ["**/node_modules/**", "**/.next/**", "**/dist/**"],
-  "ignoreDependencies": ["@types/*"]
+  "ignoreDependencies": ["@types/*", "@tailwindcss/postcss"],
+  "ignoreUnresolved": ["next"]
 }
