@@ -22,8 +22,8 @@ const TEMPLATES = [
   },
   {
     value: "react-vite" as const,
-    label: "React + Vite",
-    hint: "React 19 + Vite + Tailwind CSS v4 + shadcn/ui",
+    label: "React + Vite Monorepo",
+    hint: "Turborepo + React 19 + Vite + Tailwind CSS v4 + shadcn/ui",
     size: "~1.2 MB",
     requirements: ["Node.js >= 20", "pnpm >= 10"],
   },
@@ -119,8 +119,8 @@ async function updateProjectName(targetDir: string, projectName: string): Promis
     }
   }
 
-  // Update index.html title for react-vite
-  const indexHtmlPath = join(targetDir, "index.html");
+  // Update the React + Vite app title
+  const indexHtmlPath = join(targetDir, "apps", "web", "index.html");
   if (existsSync(indexHtmlPath)) {
     let content = readFileSync(indexHtmlPath, "utf-8");
     const safeTitle = escapeHtml(projectName);

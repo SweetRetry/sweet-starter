@@ -1,7 +1,7 @@
+import { cn } from "@workspace/ui/lib/utils"
 import type { InputHTMLAttributes } from "react"
-import { cn } from "./button"
 
-interface InputProps extends InputHTMLAttributes<HTMLInputElement> {}
+type InputProps = InputHTMLAttributes<HTMLInputElement>
 
 export function Input({ className, ...props }: InputProps) {
   return (

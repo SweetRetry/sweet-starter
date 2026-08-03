@@ -29,7 +29,7 @@ pnpm create sweet
 | Template | Description | Size |
 |----------|-------------|------|
 | [**Next.js Monorepo**](./templates/nextjs-monorepo) | Turborepo + Next.js + shadcn/ui + Biome + Knip | ~300 KB |
-| [**React + Vite**](./templates/react-vite) | React 19 + Vite + Tailwind CSS v4 + shadcn/ui | ~120 KB |
+| [**React + Vite Monorepo**](./templates/react-vite) | Turborepo + React 19 + Vite + shadcn/ui | ~120 KB |
 | [**Tauri Desktop**](./templates/tauri-desktop) | Tauri 2 + Next.js + Elysia + Turborepo | ~800 KB |
 
 ## CLI Features
@@ -96,17 +96,17 @@ my-app/
 └── pnpm-workspace.yaml
 ```
 
-### React + Vite
+### React + Vite Monorepo
 
 ```
 my-app/
-├── src/
-│   ├── components/ui/       # shadcn/ui components
-│   ├── lib/
-│   ├── App.tsx
-│   └── main.tsx
-├── index.html
-└── vite.config.ts
+├── apps/
+│   └── web/                 # React + Vite application
+├── packages/
+│   ├── ui/                  # Shared UI components
+│   └── typescript-config/   # Shared TS configs
+├── turbo.json
+└── pnpm-workspace.yaml
 ```
 
 ### Tauri Desktop

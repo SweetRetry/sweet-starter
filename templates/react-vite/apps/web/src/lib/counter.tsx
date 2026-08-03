@@ -1,6 +1,6 @@
+import { Button } from "@workspace/ui/components/button"
 import { Minus, Plus } from "lucide-react"
 import { useCountStore } from "./store"
-import { Button } from "./ui/button"
 
 export function Counter() {
   const { count, increment, decrement } = useCountStore()

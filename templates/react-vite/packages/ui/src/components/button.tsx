@@ -1,12 +1,7 @@
+import { cn } from "@workspace/ui/lib/utils"
 import { cva } from "class-variance-authority"
-import { clsx } from "clsx"
 import { motion } from "motion/react"
-import type { ButtonHTMLAttributes } from "react"
-import { twMerge } from "tailwind-merge"
-
-export function cn(...inputs: Parameters<typeof clsx>) {
-  return twMerge(clsx(inputs))
-}
+import type { ComponentProps } from "react"
 
 const buttonVariants = cva(
   "inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors focus-visible:outline-none disabled:pointer-events-none",
@@ -29,7 +24,7 @@ const buttonVariants = cva(
   }
 )
 
-interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
+interface ButtonProps extends Omit<ComponentProps<typeof motion.button>, "variant"> {
   variant?: "default" | "outline" | "ghost"
   size?: "default" | "sm"
 }
