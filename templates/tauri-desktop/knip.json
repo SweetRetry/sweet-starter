@@ -7,7 +7,6 @@
       "project": ["**/*.{ts,tsx}"],
       "ignore": [".next/**", "out/**"]
     },
-    "apps/backend": {},
     "apps/tauri": {
       "entry": [],
       "project": [],
@@ -17,7 +16,6 @@
       "entry": ["src/**/*.{ts,tsx}"],
       "project": ["src/**/*.{ts,tsx}"]
     },
-    "packages/api-client": {},
     "packages/typescript-config": {
       "entry": [],
       "project": []
@@ -34,7 +32,6 @@
   "ignoreDependencies": [
     "@types/*",
     "@tauri-apps/api",
-    "@workspace/api-client",
     "lucide-react",
     "next-themes",
     "react-dom",

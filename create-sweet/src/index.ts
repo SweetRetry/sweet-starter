@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
 import { createRequire } from "node:module";
-import { existsSync, readFileSync, readdirSync, renameSync, rmSync, writeFileSync, statSync } from "node:fs";
+import { existsSync, readFileSync, readdirSync, renameSync, rmSync, writeFileSync } from "node:fs";
 import { join, resolve } from "node:path";
 import { downloadTemplate } from "giget";
 import * as p from "@clack/prompts";
@@ -11,77 +11,56 @@ import { execa } from "execa";
 const require = createRequire(import.meta.url);
 const { version: packageVersion } = require("../package.json");
 
-// Template definitions with estimated sizes
+// Template definitions
 const TEMPLATES = [
   {
     value: "nextjs-monorepo" as const,
     label: "Next.js Monorepo",
     hint: "Turborepo + Next.js + shadcn/ui + Biome + Knip",
-    size: "~2.5 MB",
-    requirements: ["Node.js >= 20", "pnpm >= 10"],
+    requirements: ["Node.js LTS", "pnpm 11"],
   },
   {
     value: "react-vite" as const,
     label: "React + Vite Monorepo",
     hint: "Turborepo + React 19 + Vite + Tailwind CSS v4 + shadcn/ui",
-    size: "~1.2 MB",
-    requirements: ["Node.js >= 20", "pnpm >= 10"],
+    requirements: ["Node.js LTS", "pnpm 11"],
   },
   {
     value: "tauri-desktop" as const,
     label: "Tauri Desktop",
-    hint: "Tauri 2 + Next.js + Elysia + Turborepo",
-    size: "~800 KB",
-    requirements: ["Node.js >= 20", "pnpm >= 10", "Rust", "Bun"],
+    hint: "Tauri 2 + Next.js + Turborepo",
+    requirements: ["Node.js LTS", "pnpm 11", "Rust"],
   },
   {
     value: "electron-desktop" as const,
     label: "Electron Desktop",
     hint: "Electron + electron-vite + React 19 + Turborepo",
-    size: "~180 KB",
-    requirements: ["Node.js >= 20", "pnpm >= 10"],
+    requirements: ["Node.js LTS", "pnpm 11"],
   },
 ];
 
 type TemplateId = (typeof TEMPLATES)[number]["value"];
 
-// Calculate directory size recursively
-function getDirSize(dir: string): number {
-  let size = 0;
-  const files = readdirSync(dir, { withFileTypes: true });
-  for (const file of files) {
-    const path = join(dir, file.name);
-    if (file.isDirectory() && file.name !== "node_modules") {
-      size += getDirSize(path);
-    } else if (file.isFile()) {
-      size += statSync(path).size;
-    }
-  }
-  return size;
-}
-
-function formatSize(bytes: number): string {
-  const mb = bytes / 1024 / 1024;
-  if (mb < 0.1) return "<0.1 MB";
-  return `~${mb.toFixed(1)} MB`;
-}
-
 // Environment check
 async function checkEnvironment(templateId: TemplateId): Promise<{ ok: boolean; missing: string[] }> {
   const missing: string[] = [];
 
-  // Check Node.js version
+  // Check Node.js version (LTS = 24+)
   const nodeVersion = process.version;
   const majorVersion = parseInt(nodeVersion.slice(1).split(".")[0], 10);
-  if (majorVersion < 20) {
-    missing.push(`Node.js >= 20 (current: ${nodeVersion})`);
+  if (majorVersion < 24) {
+    missing.push(`Node.js LTS (>= 24) required (current: ${nodeVersion})`);
   }
 
-  // Check pnpm
+  // Check pnpm version (>= 11)
   try {
-    await execa("pnpm", ["--version"]);
+    const { stdout } = await execa("pnpm", ["--version"]);
+    const pnpmMajor = parseInt(stdout.trim().split(".")[0], 10);
+    if (pnpmMajor < 11) {
+      missing.push(`pnpm 11 required (current: ${stdout.trim()})`);
+    }
   } catch {
-    missing.push("pnpm >= 10 (not found)");
+    missing.push("pnpm 11 (not found)");
   }
 
   // Check Rust (for Tauri)
@@ -90,13 +69,6 @@ async function checkEnvironment(templateId: TemplateId): Promise<{ ok: boolean; 
       await execa("rustc", ["--version"]);
     } catch {
       missing.push("Rust (not found, install: https://rustup.rs)");
-    }
-
-    // Check Bun
-    try {
-      await execa("bun", ["--version"]);
-    } catch {
-      missing.push("Bun (not found, install: curl -fsSL https://bun.sh/install | bash)");
     }
   }
 
@@ -154,7 +126,7 @@ async function downloadAndSetup(templateId: TemplateId, projectName: string): Pr
   const template = TEMPLATES.find((t) => t.value === templateId)!;
 
   const downloadSpinner = p.spinner();
-  downloadSpinner.start(`Downloading ${template.label} (${template.size})...`);
+  downloadSpinner.start(`Downloading ${template.label}...`);
 
   try {
     const githubRepo = "SweetRetry/sweet-starter";
@@ -177,7 +149,7 @@ async function downloadAndSetup(templateId: TemplateId, projectName: string): Pr
       rmSync(gigetSubdir, { recursive: true });
     }
 
-    downloadSpinner.stop(`Downloaded ${formatSize(getDirSize(targetDir))}`);
+    downloadSpinner.stop("Downloaded");
     return true;
   } catch (err) {
     downloadSpinner.stop("Failed to download template");
@@ -245,7 +217,7 @@ async function main(): Promise<void> {
     options: TEMPLATES.map((t) => ({
       value: t.value,
       label: t.label,
-      hint: `${t.hint} · ${t.size}`,
+      hint: t.hint,
     })),
   });
 

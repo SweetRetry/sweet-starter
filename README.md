@@ -26,17 +26,17 @@ pnpm create sweet
 
 ## Templates
 
-| Template | Description | Size |
-|----------|-------------|------|
-| [**Next.js Monorepo**](./templates/nextjs-monorepo) | Turborepo + Next.js + shadcn/ui + Biome + Knip | ~300 KB |
-| [**React + Vite Monorepo**](./templates/react-vite) | Turborepo + React 19 + Vite + shadcn/ui | ~120 KB |
-| [**Tauri Desktop**](./templates/tauri-desktop) | Tauri 2 + Next.js + Elysia + Turborepo | ~800 KB |
-| [**Electron Desktop**](./templates/electron-desktop) | Electron + electron-vite + React 19 + Turborepo | ~180 KB |
+| Template | Description |
+|----------|-------------|
+| [**Next.js Monorepo**](./templates/nextjs-monorepo) | Turborepo + Next.js + shadcn/ui + Biome + Knip |
+| [**React + Vite Monorepo**](./templates/react-vite) | Turborepo + React 19 + Vite + shadcn/ui |
+| [**Tauri Desktop**](./templates/tauri-desktop) | Tauri 2 + Next.js + Turborepo |
+| [**Electron Desktop**](./templates/electron-desktop) | Electron + electron-vite + React 19 + Turborepo |
 
 ## CLI Features
 
 - **🎯 Interactive Selection** — Arrow-key navigation for template selection
-- **🔍 Environment Check** — Validates Node.js, pnpm, Rust (Tauri), Bun (Tauri)
+- **🔍 Environment Check** — Validates Node.js, pnpm, Rust (Tauri)
 - **⚡ Auto Install** — Runs `pnpm install` automatically after download
 - **📦 Git Init** — Initializes Git repository with initial commit
 - **🏷️ Project Naming** — Auto-updates package.json, index.html, and README
@@ -60,13 +60,12 @@ All templates share these modern tools:
 
 ### Common
 
-- Node.js >= 20
-- pnpm >= 10
+- Node.js LTS
+- pnpm 11
 
 ### Tauri Desktop Only
 
 - Rust (install: [rustup.rs](https://rustup.rs))
-- Bun (install: [bun.sh](https://bun.sh))
 
 ## Usage
 
@@ -115,12 +114,11 @@ my-app/
 ```
 my-app/
 ├── apps/
-│   ├── web/                 # Next.js frontend
-│   ├── backend/             # Elysia API server
+│   ├── web/                 # Next.js frontend (Tauri webview)
 │   └── tauri/               # Tauri desktop shell
 ├── packages/
 │   ├── ui/                  # Shared UI components
-│   └── api-client/          # Eden Treaty client
+│   └── typescript-config/   # Shared TS configs
 └── turbo.json
 ```
 

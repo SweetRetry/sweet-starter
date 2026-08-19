@@ -10,8 +10,8 @@
     "dist"
   ],
   "scripts": {
-    "build": "tsup src/index.ts --format esm --target node20 --clean",
-    "dev": "tsup src/index.ts --format esm --target node20 --watch",
+    "build": "tsup src/index.ts --format esm --target node24 --clean",
+    "dev": "tsup src/index.ts --format esm --target node24 --watch",
     "prepublishOnly": "pnpm build"
   },
   "keywords": [
@@ -28,7 +28,7 @@
   "author": "SweetRetry",
   "license": "MIT",
   "engines": {
-    "node": ">=20"
+    "node": ">=24"
   },
   "dependencies": {
     "@clack/prompts": "^1.0.0",

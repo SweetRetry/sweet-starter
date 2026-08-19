@@ -9,8 +9,7 @@
     "tauri": "tauri"
   },
   "dependencies": {
-    "@tauri-apps/api": "^2.10.1",
-    "@workspace/api-client": "workspace:*"
+    "@tauri-apps/api": "^2.10.1"
   },
   "devDependencies": {
     "@tauri-apps/cli": "^2.10.0",

@@ -4,71 +4,54 @@ This file provides guidance for AI coding agents working on this project.
 
 ## Project Overview
 
-This is a **Tauri 2 + Next.js 16 + Elysia** monorepo starter. It provides:
+This is a **Tauri 2 + Next.js 16** monorepo starter. It provides:
 
 - Cross-platform desktop app (Tauri)
 - Web frontend (Next.js with static export)
-- Backend API (Elysia with Bun runtime)
-- Type-safe API client (Eden Treaty)
+- Shared UI components (shadcn/ui)
 
 ## Architecture
 
 ```
-┌─────────────────────────────────────────────────────────────┐
-│                    apps/tauri (Desktop Shell)               │
-│  ┌───────────────────────────────────────────────────────┐  │
-│  │              apps/web (Next.js Frontend)              │  │
-│  │  ┌─────────────────┐    ┌─────────────────────────┐   │  │
-│  │  │ @workspace/ui   │    │ @workspace/api-client   │   │  │
-│  │  │ (shadcn/ui)     │    │ (Eden Treaty)           │   │  │
-│  │  └─────────────────┘    └───────────┬─────────────┘   │  │
-│  └─────────────────────────────────────┼─────────────────┘  │
-└────────────────────────────────────────┼────────────────────┘
-                                         │ HTTP (localhost:3001)
-                              ┌──────────▼──────────┐
-                              │   apps/backend      │
-                              │   (Elysia + Bun)    │
-                              └─────────────────────┘
+┌──────────────────────────────────────────────────────────┐
+│              apps/tauri (Desktop Shell)                 │
+│  ┌────────────────────────────────────────────────────┐  │
+│  │              apps/web (Next.js Frontend)           │  │
+│  │  ┌────────────────────────────────────────────┐    │  │
+│  │  │            @workspace/ui (shadcn/ui)       │    │  │
+│  │  └────────────────────────────────────────────┘    │  │
+│  └────────────────────────────────────────────────────┘  │
+└──────────────────────────────────────────────────────────┘
 ```
 
 ## Key Files
 
 | File | Purpose |
 |------|---------|
-| `apps/backend/src/index.ts` | Elysia API server entry point |
 | `apps/web/app/` | Next.js App Router pages |
 | `apps/tauri/src-tauri/tauri.conf.json` | Tauri configuration |
 | `apps/tauri/src-tauri/src/lib.rs` | Rust commands and plugins |
-| `packages/api-client/src/index.ts` | Eden Treaty client factory |
 | `packages/ui/src/components/` | Shared React components |
 | `turbo.json` | Turborepo task configuration |
 
 ## Development Commands
 
 ```bash
-# Start all services
+# Run all dev tasks
 pnpm dev
 
-# Start individual services
-pnpm dev:web      # Next.js on localhost:3000
-pnpm dev:backend  # Elysia on localhost:3001
+# Individual services
+pnpm dev:web      # Next.js dev server
 pnpm dev:tauri    # Desktop app (starts web automatically)
-
-# Portless — named .localhost URLs (no more port conflicts)
-portless proxy start                    # Start proxy daemon (once)
-portless web next dev                   # → http://web.localhost:1355
-portless api pnpm dev:backend           # → http://api.localhost:1355
 
 # Quality checks
 pnpm typecheck    # TypeScript checking
 pnpm lint         # Biome linting
 pnpm check        # Biome with auto-fix
 pnpm knip         # Find unused code
-npx -y react-doctor@latest . --verbose  # React project health check
 
 # Build
 pnpm build        # Build all (may fail without Rust)
-pnpm turbo build --filter=web --filter=@workspace/backend  # Build web + backend only
 ```
 
 ## Code Style
@@ -84,36 +67,6 @@ This project uses **Biome** for linting and formatting:
 Run `pnpm check` to auto-fix issues before committing.
 
 ## Adding Features
-
-### Adding a New API Route
-
-1. Edit `apps/backend/src/index.ts`
-2. Add routes using Elysia's chained API
-3. Export the App type for Eden inference
-
-```typescript
-const app = new Elysia()
-  .use(cors())
-  // Add your route
-  .get("/users", () => [{ id: 1, name: "John" }])
-  .post("/users", ({ body }) => body, {
-    body: t.Object({
-      name: t.String()
-    })
-  })
-  .listen(3001)
-
-export type App = typeof app
-```
-
-### Using the API Client
-
-```typescript
-import { createApiClient } from "@workspace/api-client"
-
-const api = createApiClient()
-const { data, error } = await api.users.get()
-```
 
 ### Adding a UI Component
 
@@ -155,25 +108,15 @@ const result = await invoke("my_command", { arg: "hello" })
 | Package | Alias | Description |
 |---------|-------|-------------|
 | `packages/ui` | `@workspace/ui` | Shared React components |
-| `packages/api-client` | `@workspace/api-client` | Eden Treaty API client |
 | `packages/typescript-config` | `@workspace/typescript-config` | Shared TS configs |
-| `apps/backend` | `@workspace/backend` | Elysia backend (type export only) |
 
 ## TypeScript Configurations
 
 | Config | Used By |
 |--------|---------|
-| `base.json` | Root, api-client |
+| `base.json` | Root |
 | `nextjs.json` | apps/web |
 | `react-library.json` | packages/ui |
-| `bun.json` | apps/backend |
-
-## Environment Variables
-
-Create `.env` files as needed:
-
-- `apps/web/.env.local` - Next.js environment
-- `apps/backend/.env` - Backend environment
 
 ## Testing
 
@@ -190,17 +133,6 @@ Ensure Rust is installed:
 ```bash
 curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
 ```
-
-### Backend won't start
-
-Ensure Bun is installed:
-```bash
-curl -fsSL https://bun.sh/install | bash
-```
-
-### Type errors in api-client
-
-Ensure backend types are exported correctly. The `@workspace/backend` package must export `App` type.
 
 ### Module resolution issues
 
@@ -221,5 +153,4 @@ When updating dependencies:
 - Use `pnpm check` to auto-fix linting issues
 - The `@workspace/` prefix is an alias for internal packages
 - Tauri requires Rust toolchain - some environments may not have it
-- Backend uses Bun runtime, not Node.js
 - Next.js is configured for static export (`output: "export"`)

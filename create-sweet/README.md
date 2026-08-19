@@ -34,7 +34,7 @@ npx create-sweet-starter
 |----------|-------------|------------|
 | **Next.js Monorepo** | Full-featured monorepo setup | Turborepo, Next.js 16, shadcn/ui, Biome, Knip |
 | **React Starter** | Lightweight React SPA | React 19, Vite, Tailwind CSS v4, shadcn/ui |
-| **Tauri Starter** | Cross-platform desktop app | Tauri 2, Next.js, Elysia, Turborepo |
+| **Tauri Starter** | Cross-platform desktop app | Tauri 2, Next.js, Turborepo |
 
 ## Interactive CLI
 
@@ -46,11 +46,11 @@ The CLI will guide you through:
 
 ## Prerequisites
 
-- **Node.js** >= 20
-- **pnpm** >= 10 (recommended)
+- **Node.js** LTS
+- **pnpm** 11
 
 Some templates may have additional requirements:
-- **Tauri Starter**: Rust, Bun
+- **Tauri Starter**: Rust
 
 ## License
 

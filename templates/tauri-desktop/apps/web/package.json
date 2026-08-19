@@ -13,7 +13,6 @@
   },
   "dependencies": {
     "@tanstack/react-query": "^5.90.21",
-    "@workspace/api-client": "workspace:*",
     "@workspace/ui": "workspace:*",
     "dayjs": "^1.11.19",
     "lucide-react": "^0.575.0",
