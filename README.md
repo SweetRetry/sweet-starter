@@ -31,6 +31,7 @@ pnpm create sweet
 | [**Next.js Monorepo**](./templates/nextjs-monorepo) | Turborepo + Next.js + shadcn/ui + Biome + Knip | ~300 KB |
 | [**React + Vite Monorepo**](./templates/react-vite) | Turborepo + React 19 + Vite + shadcn/ui | ~120 KB |
 | [**Tauri Desktop**](./templates/tauri-desktop) | Tauri 2 + Next.js + Elysia + Turborepo | ~800 KB |
+| [**Electron Desktop**](./templates/electron-desktop) | Electron + electron-vite + React 19 + Turborepo | ~180 KB |
 
 ## CLI Features
 
@@ -47,7 +48,7 @@ All templates share these modern tools:
 
 | Category | Tools |
 |----------|-------|
-| **Framework** | Next.js 16 / React 19 / Tauri 2 |
+| **Framework** | Next.js 16 / React 19 / Tauri 2 / Electron |
 | **Language** | TypeScript 5.7+ (Strict Mode) |
 | **Styling** | Tailwind CSS v4 |
 | **Components** | shadcn/ui |
@@ -123,6 +124,21 @@ my-app/
 └── turbo.json
 ```
 
+### Electron Desktop
+
+```
+my-app/
+├── apps/
+│   └── desktop/             # Electron app (electron-vite)
+│       ├── src/main/        # Main process
+│       ├── src/preload/     # Preload scripts (window.api)
+│       └── src/renderer/    # React renderer
+├── packages/
+│   ├── ui/                  # Shared UI components
+│   └── typescript-config/   # Shared TS configs
+└── turbo.json
+```
+
 ## CLI Architecture
 
 ```
@@ -134,7 +150,8 @@ sweet/starter/
 └── templates/              # Starter templates
     ├── nextjs-monorepo/
     ├── react-vite/
-    └── tauri-desktop/
+    ├── tauri-desktop/
+    └── electron-desktop/
 ```
 
 ## Development

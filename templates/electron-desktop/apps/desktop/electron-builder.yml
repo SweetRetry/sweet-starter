@@ -1,0 +1,13 @@
+appId: com.example.electron-desktop
+productName: electron-desktop
+directories:
+  output: dist
+files:
+  - out/**
+asar: true
+mac:
+  category: public.app-category.utilities
+win:
+  target: nsis
+linux:
+  target: AppImage

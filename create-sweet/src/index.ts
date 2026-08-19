@@ -34,6 +34,13 @@ const TEMPLATES = [
     size: "~800 KB",
     requirements: ["Node.js >= 20", "pnpm >= 10", "Rust", "Bun"],
   },
+  {
+    value: "electron-desktop" as const,
+    label: "Electron Desktop",
+    hint: "Electron + electron-vite + React 19 + Turborepo",
+    size: "~180 KB",
+    requirements: ["Node.js >= 20", "pnpm >= 10"],
+  },
 ];
 
 type TemplateId = (typeof TEMPLATES)[number]["value"];
